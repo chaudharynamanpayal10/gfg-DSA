@@ -17,25 +17,35 @@ class Solution {
   public:
     vector<int> postOrder(Node* node) {
         // code here
-               stack<Node*>s;
-               s.push(node);
-               vector<int>ans;
-
-               while(!s.empty()){
-                   Node *temp = s.top();
-                   s.pop();
-                   ans.push_back(temp->data);
-                   
-                    if(temp->left){
-                       s.push(temp->left);
-                   }
-
-                   if(temp->right){
-                       s.push(temp->right);
-                   }
-                   
-               }
-               reverse(ans.begin(),ans.end());
-               return ans;
+        vector<int>ans;
+        
+        while(node){
+            if(!node->right){
+                ans.push_back(node->data);
+                node=node->left;
+            }
+            
+            else{
+                Node *curr=node->right;
+                
+                while(curr->left && curr->left!=node){
+                    curr=curr->left;
+                }
+                
+                if(curr->left==NULL){
+                    ans.push_back(node->data);
+                    curr->left=node;
+                    node=node->right;
+                }
+                
+                else{
+                    curr->left=NULL;
+                    node=node->left;
+                }
+            }
+        }
+        reverse(ans.begin(),ans.end());
+        return ans;
+        
     }
 };
